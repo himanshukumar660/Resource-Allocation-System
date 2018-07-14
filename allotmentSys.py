@@ -84,7 +84,20 @@ for each in pref:
 		findCyclePath(visitedNodes, each, room, prevPath)
 		prevPath.remove(room)
 
+max_len_room = 0
+for each in cyclePath:
+	for room in cyclePath[each]:
+		max_len_room = max(max_len_room, len(room))
+	new_list_of_longest_path = []
+	for room in cyclePath[each]:
+		if len(room)>=max_len_room:
+			new_list_of_longest_path.append(room)
+	cyclePath[each] = new_list_of_longest_path
 
+for each in cyclePath:
+	print each, cyclePath[each]
+
+room_occupied = []
 
 
 
