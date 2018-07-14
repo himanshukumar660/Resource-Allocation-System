@@ -26,24 +26,27 @@ def findCyclePath(visitedNodes ,source, currNode, prevPath):
 
 #Objective : To maximize the matching of the room allotment list with the user prefrance
 
-num_of_room = 9
+num_of_room = 10
 
 original_allotment = {}
 
 for each in range(1, num_of_room+1):
 	original_allotment[each] = each
 
+print "Initial Allotments"
+for each in original_allotment:
+	print each, " : " ,original_allotment[each]
+
+
 #The prefrance added by the user/students
 pref = {
-	1:{2,6},
-	2:{3},
-	3:{4},
-	4:{5},
-	5:{1,2},
+	1:{4,3},
+	3:{7,8,6},
+	4:{10},
 	6:{7},
 	7:{8},
-	8:{9,5},
-	9:{1}
+	8:{7},
+	10:{1}
 }
 
 #[in_deg, out_deg]
@@ -84,35 +87,88 @@ for each in pref:
 		findCyclePath(visitedNodes, each, room, prevPath)
 		prevPath.remove(room)
 
-max_len_room = 0
-for each in cyclePath:
-	for room in cyclePath[each]:
-		max_len_room = max(max_len_room, len(room))
-	new_list_of_longest_path = []
-	for room in cyclePath[each]:
-		if len(room)>=max_len_room:
-			new_list_of_longest_path.append(room)
-	cyclePath[each] = new_list_of_longest_path
+array_all_path = []
+
+#print cyclePath
 
 for each in cyclePath:
-	print each, cyclePath[each]
-
-room_occupied = []
-
+	for each_path in cyclePath[each]:
+		array_all_path.append(each_path)
 
 
+def compSort(a,b):
+	if len(a)>len(b):
+		return -1
+	return 1
+
+array_all_path.sort(cmp=compSort)
 
 
+set_of_final_path = []
+
+for i,each in enumerate(array_all_path):
+	
+	partialPath = []
+
+	occupied_rooms = [0 for p in range(0,num_of_room)]
+
+	for room in each:
+		occupied_rooms[int(room)-1] = 1
+
+	partialPath.append(each)
+	
+	for rooms in array_all_path[i:]:
+
+		fg=1
+		for room in rooms[:-1]:
+			if occupied_rooms[int(room)-1]==1:
+				fg=0
+				break
+			
+		if fg==1:
+			for room in rooms:
+				occupied_rooms[int(room)-1] = 1
+			partialPath.append(rooms)
+
+		elif fg==0:
+			continue
+
+	set_of_final_path.append(partialPath)
+
+def len_comp(a,b):
+	len_a = 0
+	len_b = 0
+	for each in a:
+		len_a = len_a + len(each)
+	for each in b:
+		len_b = len_b + len(each)
+
+	if len_a>len_b:
+		return -1
+	return 1
+
+set_of_final_path.sort(cmp=len_comp)
 
 
+final_allotments = {}
+
+for each in range(1,num_of_room+1):
+	final_allotments[each] = each
+
+for each in set_of_final_path[0]:
+	for i,room in enumerate(each[:-1]):
+		final_allotments[int(room)] = each[i+1] 
+
+for each in pref:
+	print each, " : " , pref[each]
 
 
-
-
-
-
-
-
-
-
-
+satisfaction = 0
+print "Final Allotments"
+for each in final_allotments:
+	print each, " : " ,final_allotments[each]
+	if each in pref and final_allotments[each] in pref[each]:
+		satisfaction = satisfaction+1
+	
+print "Satisfaction : ",
+print satisfaction*1.0*100/len(pref)
