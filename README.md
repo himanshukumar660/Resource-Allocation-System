@@ -1,4 +1,4 @@
-# Resource Allotment System
+# Resource Allocation System
 ## Introduction
 An algorithm to maximise the matching of resource allocations with the user preference.
 
