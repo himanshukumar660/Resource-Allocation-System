@@ -13,6 +13,6 @@ Given a resource allocation list of a group of users, and another list of their 
 ## The Algorithm.
 - I have tried to solve this resource allocation problem by finding the set of largest cycle in the resources for each user in the user prefrence list.
 - Find all the cyclic paths in the resouce allocation graph for each user.
-- Now try to get a subset of these cyclic paths such that the sum of length of all the cycles in each path present in this subset is maximum.
+- Now try to get a subset of these cyclic paths such that they are disjoint and the sum of length of all the cycles in each path present in this subset is maximum.
 - Sort these paths by comparing their total sum of lengths and finally return the set of paths which sums up to the maximum length.
 - Lastly, to compare the satisfaction, by measuring ratio of the number of students who got allotted to their wish rooms by the total number of students who opted for change of rooms.
